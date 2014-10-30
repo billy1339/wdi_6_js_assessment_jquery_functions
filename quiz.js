@@ -22,6 +22,8 @@ $('#question-2 p').on('click', alertClicked);
 
 $('#question-3').on('click', alertClicked);
 //this does not work because it is referring to the div 'question3' as a whole and not referring to any specific thing to click on.
+//#question-3 is nothing, it does not exist yet.
+//you need to wrap event handlers in $(document).ready or (window.onload) for them to bind properly, as they dont exist yet otherwise
 
 // Question 4
 // Make the HTML in the 'question-4' div fade out when you hover over it,
@@ -30,6 +32,17 @@ var fadeBack = function() {
   $(this).fadeOut();
 }
 $('#question-4').hover(fadeBack);
+
+
+//one way to do it:
+
+$('#question-4').hover(function(){
+  $(this).stop(true,true).fadeOut();
+}, function() {
+  $(this).stop(true,true).fadeIn();
+}
+});
+
 
 // Question 5
 // Make question 5's h2 turn blue when someone types 'winning'
@@ -40,6 +53,26 @@ var addInput = function() {
   $(this).val(' ');
   $('<div>').html(inputName);
 };
+
+
+//correct answer.
+$('#q-5-input').on('change', function() {
+  if $(this).val() === 'winning') {
+  $(this).prev().css('color', 'blue'); //prev() is previous element, goes to previous element int eh tree h2, parent() would give you the div
+  }
+});
+
+//other answer.
+
+var turnBlue = function(event) {
+  if (event.which == 13 && $(this).val() === 'winning') {
+    $(this).parent().find('h2').css('color', 'blue');
+  }
+}
+//put this in $(document).ready
+$('#q-5-input').keypress(turnBlue);
+
+parent().find('h2') --> will give you the h2
 
 
 // Question 6
@@ -58,12 +91,22 @@ String.prototype.reverse = function() {
   return newString;
 };
 
+$(document).ready(function() {
+  var rev = $('#question-6').prev().text(reverse());
+  var orig = $('#question-6 h2').val();
+  $('#question-6 h2').html(h2.reverse());
 // $('#question-6').$('<h2>').reverse();
-
+});
 
 // Question 7
 // Write a method called 'highLightHeaders' that will add a class of 'highlight'
 // to all h2's when it is invoked
+
+var highLightHeaders = function() {
+  $('h2').addClass('highlight');
+}
+
+
 
 // Question 8
 // Define a constructor function called `Cat`,that accepts a `name`,
@@ -108,5 +151,15 @@ var prices = items.map(function(i) {
   itemPrices.push(i.price);})
 
 var tot = itemPrices[0] + itemPrices[1] + itemPrices[2] + itemPrices[3];
+
+
+
+items
+  .map(item, function() {
+    return item.price;
+  })
+  .reduce(function(a, b) {   //reduce takes the first 2=> result, and then add that result to the next one,
+    return a + b;
+  });
 
 
